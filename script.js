@@ -1,77 +1,45 @@
-// 1. Assignment of strings(Compare strings):
-function areAnagrams(firstWord, secondWord) {
-    // Convert to lowercase and sort the characters
-    const sortedFirst = firstWord.toLowerCase().split('').sort().join('');
-    const sortedSecond = secondWord.toLowerCase().split('').sort().join('');
+// 1. Compare Strings (Anagrams)
+let firstWord = "Mary".toLowerCase().split("").sort().join("");
+let secondWord = "Army".toLowerCase().split("").sort().join("");
+console.log("1:", firstWord === secondWord);
 
-    return sortedFirst === sortedSecond;
-}
-
-let firstWord = "Mary";
-let secondWord = "Army";
-console.log(areAnagrams(firstWord, secondWord)); // true
-
-// 2. Change side of string:
-function reverseString(str) {
-    return str.split('').reverse().join('');
-}
-
+// --------------------------------------------------------------------------------
+// 2. Reverse string
 let str1 = "asdtghujiklop";
-console.log(reverseString(str1)); // polkijuhgtdsa
+console.log("2:", str1.split('').reverse().join(''));
 
-// 3. Remove duplicates
-function removeDuplicates(str) {
-    return [...new Set(str)].join('');
+// --------------------------------------------------------------------------------
+// 3. Remove duplicates from string
+let str2 = "asfoaopgeofkcaslhgkls";
+console.log("3:", [...new Set(str2)].join(''));
+
+// --------------------------------------------------------------------------------
+// 4. Swap case
+let str3 = "aabsdeef";
+let swapped = str3.split('').map(c =>
+    c === c.toLowerCase() ? c.toUpperCase() : c.toLowerCase()
+).join('');
+console.log("4:", swapped);
+
+// --------------------------------------------------------------------------------
+// 5. Unique in order
+function uniqueInOrder(str) {
+    return [...str].filter((char, i) => char !== str[i - 1]);
 }
+console.log("5:", uniqueInOrder('AAAABBBCCDAABBB'));
 
-let str = "asfoaopgeofkcaslhgkls";
-console.log(removeDuplicates(str)); // asfopekchlg
-
-// 4. Alternate uppercase and lowercase
-function alternateCase(str) {
-    return str.split('').map((char, index) =>
-        index % 2 === 0 ? char.toUpperCase() : char.toLowerCase()
-    ).join('');
-}
-
-let str4 = "aabsdeef";
-console.log(alternateCase(str4)); // AaBsDeEf
-
-// 5. uniqueInOrder
-function uniqueInOrder(iterable) {
-    const result = [];
-    let lastChar = null;
-
-    for (let i = 0; i < iterable.length; i++) {
-        if (iterable[i] !== lastChar) {
-            result.push(iterable[i]);
-            lastChar = iterable[i];
-        }
-    }
-
-    return result;
-}
-
-console.log(uniqueInOrder('AAAABBBCCDAABBB')); // ['A','B','C','D','A','B']
-
-// 6. The biggest difference between numbers:
-function maxProfit(prices) {
-    let maxDiff = 0;
-    let minPrice = prices[0];
-
-    for (let i = 1; i < prices.length; i++) {
-        const diff = prices[i] - minPrice;
-        maxDiff = Math.max(maxDiff, diff);
-        minPrice = Math.min(minPrice, prices[i]);
-    }
-
-    return maxDiff;
-}
-
+// --------------------------------------------------------------------------------
+// 6. Biggest difference
 const arr = [10, 7, 5, 8, 11, 9, 1];
-console.log(maxProfit(arr)); // 6 (buy at 5, sell at 11)
+let min = arr[0], maxDiff = 0;
+for (let i = 1; i < arr.length; i++) {
+    if (arr[i] < min) min = arr[i];
+    maxDiff = Math.max(maxDiff, arr[i] - min);
+}
+console.log("6:", maxDiff);
 
-// 7. User salary analysis
+// --------------------------------------------------------------------------------
+// 7. Salary tasks
 let users = [
     { name: "Maria", role: "frontend developer", salary: 15000 },
     { name: "Doron", role: "frontend developer", salary: 57000 },
@@ -79,55 +47,15 @@ let users = [
     { name: "Maor", role: "backend developer", salary: 60000 },
 ];
 
-// task 1 Find max salary of user:
-function findMaxSalary(users) {
-    return Math.max(...users.map(user => user.salary));
-}
-console.log("Max salary:", findMaxSalary(users)); // 60000
+let salaries = users.map(u => u.salary);
+let maxSalary = Math.max(...salaries);
+let minSalary = Math.min(...salaries);
+let avgSalary = salaries.reduce((a, b) => a + b) / salaries.length;
+let backends = users.filter(u => u.role.includes("backend"));
+console.log("7:", { maxSalary, minSalary, avgSalary, backends });
 
-// task 2 Find user with max salary:
-function findUserWithMaxSalary(users) {
-    return users.reduce((max, user) =>
-        user.salary > max.salary ? user : max, users[0]);
-}
-console.log("User with max salary:", findUserWithMaxSalary(users)); // Maor
-
-// task 3 Find min salary of user:
-function findMinSalary(users) {
-    return Math.min(...users.map(user => user.salary));
-}
-console.log("Min salary:", findMinSalary(users)); // 15000
-
-// task 4 Find average salary of user:
-function findAverageSalary(users) {
-    const total = users.reduce((sum, user) => sum + user.salary, 0);
-    return total / users.length;
-}
-console.log("Average salary:", findAverageSalary(users)); // 38750
-
-// task 5 find all backends:
-function findBackendDevelopers(users) {
-    return users.filter(user => user.role === "backend developer");
-}
-console.log("Backend developers:", findBackendDevelopers(users));
-
-// 8 find str in nested object
-function findString(targetStr, obj = data) {
-    if (obj.name === targetStr) {
-        return true;
-    }
-
-    for (const key in obj) {
-        if (typeof obj[key] === 'object' && obj[key] !== null) {
-            if (findString(targetStr, obj[key])) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
+// --------------------------------------------------------------------------------
+// 8. Find string in nested object
 const data = {
     name: "Doron",
     firstData: {
@@ -138,48 +66,79 @@ const data = {
     }
 };
 
-console.log(findString("Moty", data)); // true
+function findString(value, obj = data) {
+    for (let key in obj) {
+        if (typeof obj[key] === "object") {
+            if (findString(value, obj[key])) return true;
+        }
+        if (obj[key] === value) return true;
+    }
+    return false;
+}
+console.log("8:", findString("Moty"));
 
-// 9 Write a function to check the correctness of brackets:
+// --------------------------------------------------------------------------------
+// 9. Balanced brackets
 function isBalanced(str) {
-    const stack = [];
-    const pairs = {
-        ')': '(',
-        '}': '{',
-        ']': '['
+    let stack = [];
+    let map = {
+        '(': ')',
+        '{': '}',
+        '[': ']'
     };
-
-    for (const char of str) {
-        if ('{[('.includes(char)) {
-            stack.push(char);
-        } else if ('}])'.includes(char)) {
-            if (stack.pop() !== pairs[char]) {
-                return false;
-            }
+    for (let ch of str) {
+        if (map[ch]) {
+            stack.push(map[ch]);
+        } else {
+            if (stack.pop() !== ch) return false;
         }
     }
-
     return stack.length === 0;
 }
+console.log("9:", isBalanced("{{([])}}"));
 
-console.log(isBalanced("{{([])}}"));  // true
+// --------------------------------------------------------------------------------
+// 10. Remove duplicates in array
+let nums = [1, 2, 2, 3, 5, 4, 6, 7, 3, 2, 5, 7, 9, 22, 35, 6];
+console.log("10:", [...new Set(nums)]);
 
-// 10. Write a function that will delete all duplicates:
-function removeDuplicatesFromArray(arr) {
-    return [...new Set(arr)];
-}
+// --------------------------------------------------------------------------------
+// 11. Button closures
+//way 1
+// for (var i = 0; i < 5; i++) {
+//   var btn = document.createElement('button');
+//   btn.appendChild(document.createTextNode(`Button ${i}`));
+//   btn.addEventListener('click', function(){ console.log(i); });
+//   document.body.appendChild(btn);
+// }
+// Way 1 (will print 5 always)
 
-const arr10 = [1, 2, 2, 3, 5, 4, 6, 7, 3, 2, 5, 7, 9, 22, 35, 6];
-console.log(removeDuplicatesFromArray(arr10)); // [1,2,3,5,4,6,7,9,22,35]
+// way 2
+// for (var i = 0; i < 5; i++) {
+//   var btn = document.createElement('button');
+//   btn.appendChild(document.createTextNode('Button ' + i));
+//   btn.addEventListener('click', (function(i) {
+//     return function() { console.log(i); };
+//   })(i));
+//   document.body.appendChild(btn);
+// Way 2 (correctly prints 0–4)
 
-// 11. What will be printed?
-// way 1: For all buttons, i will be 5 when clicked because var is function-scoped 
-// and the loop has already completed by the time the buttons are clicked.
 
-// way 2: Each button will display its correct index (0, 1, 2, 3, 4) when clicked
-// because the IIFE creates a new scope with the current value of i.
-
-// 12 What will be printed?
+// --------------------------------------------------------------------------------
+// 12. This context  
+var myObject = {
+    foo: "bar",
+    func: function () {
+        var self = this;
+        console.log("12:", "outer func: this.foo = " + this.foo);
+        console.log("12:", "outer func: self.foo = " + self.foo);
+        (function () {
+            console.log("12:", "inner func: this.foo = " + this.foo);
+            console.log("12:", "inner func: self.foo = " + self.foo);
+        })();
+    }
+};
+myObject.func();
 /*
 outer func:  this.foo = bar
 outer func:  self.foo = bar
@@ -187,49 +146,80 @@ inner func:  this.foo = undefined
 inner func:  self.foo = bar
 */
 
+// --------------------------------------------------------------------------------
+// 13. Clock angle
 // 13. Find angle between hours and minutes arrows:
-function findClockAngle(h, m) {
-    // Hours hand moves 30 degrees per hour plus 0.5 degrees per minute
-    const hourAngle = (h % 12) * 30 + m * 0.5;
 
-    // Minutes hand moves 6 degrees per minute
-    const minuteAngle = m * 6;
+// let h = +prompt("Enter a hour: ");
+// let m = +prompt("Enter a minute: ");
 
-    // Calculate the absolute difference
-    let angle = Math.abs(hourAngle - minuteAngle);
+// let hourAngleEveryMinute = 0.5;
+// let angle;
 
-    // Take the smaller angle (less than 180 degrees)
-    angle = Math.min(angle, 360 - angle);
-
-    return angle;
+function getAngle(h, m) {
+    let angle = Math.abs(30 * h + 0.5 * m - 6 * m);
+    return Math.min(angle, 360 - angle);
 }
+// Example:
+console.log("13:", getAngle(3, 30));
 
-// Example
-console.log(findClockAngle(3, 15)); // 7.5 degrees
+// --------------------------------------------------------------------------------
+// 14. What will be printed? 
 
-// 14. What will be printed?
-console.log(1 + "2" + "2");       // "122" (1 is converted to string)
-console.log(1 + +"2" + "2");      // "32" (+"2" is converted to number 2, then added to 1, then converted to string with "2")
-console.log(1 + -"1" + "2");      // "02" (1 + (-1) = 0, then + "2" = "02")
-console.log(+"1" + "1" + "2");    // "112" (+"1" is number 1, then converted to string with "1" and "2")
-console.log("A" - "B" + "2");     // "NaN2" (A-B is NaN, then + "2" = "NaN2")
-console.log("A" - "B" + 2);       // NaN (A-B is NaN, then + 2 is still NaN)
+// console.log(1 + "2" + "2");    // "122" (1 is converted to string)
+// console.log(1 + +"2" + "2");   // "32" (+"2" is converted to number 2, then added to 1, then converted to string with "2")
+// console.log(1 + -"1" + "2");   // "02" (1 + (-1) = 0, then + "2" = "02")
+// console.log(+"1" + "1" + "2"); // "112" (+"1" is number 1, then converted to string with "1" and "2")
+// console.log("A" - "B" + "2");  // "NaN2" (A-B is NaN, then + "2" = "NaN2")
+// console.log("A" - "B" + 2);    //  NaN (A-B is NaN, then + 2 is still NaN)
 
-// 15. What will be printed?
-console.log("0 || 1 = " + (5 || 2));  // "0 || 1 = 5" (returns first truthy value)
-console.log("1 || 2 = " + (1 || 2));  // "1 || 2 = 1" (returns first truthy value)
-console.log("0 && 1 = " + (0 && 1));  // "0 && 1 = 0" (returns first falsy value)
-console.log("1 && 2 = " + (1 && 2));  // "1 && 2 = 2" (returns last value if all truthy)
+// --------------------------------------------------------------------------------
+// 15.  What will be printed? 
+console.log("15:", "0 || 1 = " + (5 || 2)); // "0 || 1 = 5" (returns first truthy value)
+console.log("15:", "1 || 2 = " + (1 || 2)); // "1 || 2 = 1" (returns first truthy value)
+console.log("15:", "0 && 1 = " + (0 && 1)); // "0 && 1 = 0" (returns first falsy value)
+console.log("15:", "1 && 2 = " + (1 && 2)); // "1 && 2 = 2" (returns last value if all truthy)
 
-// 16. What will be printed?
-// first version:
-// console.log(add(2)(3)(4) === 9); // false - object comparison with valueOf
+// --------------------------------------------------------------------------------
+// 16.  What will be printed?
+// first
+// function add(num1) {
+//     let sum = num1;
+//     function a(num2) {
+//         sum += num2;
+//         return a;
+//     }
+
+//     a.valueOf = () => sum;
+//     return a;
+// }
+
+// console.log(add(2)(3)(4) === 9);  // false - object comparison with valueOf
 // console.log(add(2)(3)(4) == 9);  // true - allows type coercion, valueOf is used
 
-// second version:
+// second
+// function add (x) {
+//     return function (y) { // anonymous function
+//       return function (z) { // anonymous function
+//         return x + y + z;
+//       };
+//     };
+// }
+
 // console.log(add(2)(3)(4) === 9); // true - direct number comparison
 
-// 17. Write Fibonacci logic:
+
+// --------------------------------------------------------------------------------
+// 17. Fibonacci
+
+// function fibonacci(n) {
+//     const res = [0, 1];
+//     for (let i = 2; i <= n; i++) {
+//         res.push(res[i - 1] + res[i - 2]);
+//     }
+//     return res;
+// }
+
 function fibonacci(n) {
     if (n <= 0) return 0;
     if (n === 1) return 1;
@@ -243,119 +233,92 @@ function fibonacci(n) {
 
     return b;
 }
+console.log("17:", fibonacci(10));
 
-// Print Fibonacci sequence
-for (let i = 0; i <= 10; i++) {
-    console.log(fibonacci(i));
-}
+// --------------------------------------------------------------------------------
+// 18. Merge and sort
+let s1 = "afhghhhhh", s2 = "abbbbb";
+console.log("18:", [...new Set((s1 + s2).split(''))].sort().join(''));
 
-// 18. Merge and sort:
-function mergeAndSort(str1, str2) {
-    return (str1 + str2).split('').sort().join('');
-}
-
-let str18a = "afhghhhhh";
-let str18b = "abbbbb";
-console.log(mergeAndSort(str18a, str18b)); // "aabbbbbbfffghhhhhhh"
+// --------------------------------------------------------------------------------
 
 // 19. write Promise.all():
-function promiseAll(promises) {
-    return new Promise((resolve, reject) => {
-        if (!Array.isArray(promises)) {
-            return reject(new TypeError('Promises must be an array'));
-        }
 
-        const results = new Array(promises.length);
-        let resolvedCount = 0;
+// p1 = new Promise(function (resolve, reject) {
+//     setTimeout(resolve, 100, 'hi');
+// });
+// p2 = new Promise(function (resolve, reject) {
+//     setTimeout(resolve, 100, 'all');
+// });
+// p3 = new Promise(function (resolve, reject) {
+//     setTimeout(resolve, 100, 'there');
+// });
 
-        if (promises.length === 0) {
-            return resolve(results);
-        }
+let p1 = new Promise(res => setTimeout(res, 100, 'hi'));
+let p2 = new Promise(res => setTimeout(res, 100, 'all'));
+let p3 = new Promise(res => setTimeout(res, 100, 'there'));
 
-        promises.forEach((promise, index) => {
-            Promise.resolve(promise).then(
-                (value) => {
-                    results[index] = value;
-                    resolvedCount++;
+Promise.all([p1, p2, p3]).then(results => console.log("19:", results));
 
-                    if (resolvedCount === promises.length) {
-                        resolve(results);
-                    }
-                },
-                (error) => {
-                    reject(error);
-                }
-            );
-        });
-    });
-}
+// --------------------------------------------------------------------------------
+// 20. Avg by company
 
-// Example usage:
-const p1 = new Promise((resolve) => setTimeout(() => resolve('hi'), 100));
-const p2 = new Promise((resolve) => setTimeout(() => resolve('all'), 100));
-const p3 = new Promise((resolve) => setTimeout(() => resolve('there'), 100));
+// const userSalaries = [
+//     { company: "Microsoft", salary: 50000 },
+//     { company: "Google", salary: 1000 },
+//     { company: "Microsoft", salary: 50000 },
+//     { company: "Microsoft", salary: 1000 },
+//     { company: "Meta", salary: 30000 },
+// ];
 
-promiseAll([p1, p2, p3]).then(console.log); // ["hi", "all", "there"]
+// way1:
+// let companyMap = {};
+// userSalaries.forEach(({ company, salary }) => {
+//     companyMap[company] = companyMap[company] || [];
+//     companyMap[company].push(salary);
+// });
+// for (let c in companyMap) {
+//     let avg = companyMap[c].reduce((a, b) => a + b) / companyMap[c].length;
+//     console.log(`20: ${c} avg = ${avg}`);
+// }
 
-// 20. Avg of salaries:
-function averageSalaryByCompany(users) {
-    const companyTotals = {};
-    const companyCounts = {};
 
-    users.forEach(user => {
-        if (!companyTotals[user.company]) {
-            companyTotals[user.company] = 0;
-            companyCounts[user.company] = 0;
-        }
+// way2:
+// function averageSalaryByCompany(users) {
+//     const companyTotals = {};
+//     const companyCounts = {};
 
-        companyTotals[user.company] += user.salary;
-        companyCounts[user.company]++;
-    });
+//     users.forEach(user => {
+//       if (!companyTotals[user.company]) {
+//         companyTotals[user.company] = 0;
+//         companyCounts[user.company] = 0;
+//       }
 
-    const result = {};
-    for (const company in companyTotals) {
-        result[company] = companyTotals[company] / companyCounts[company];
-    }
+//       companyTotals[user.company] += user.salary;
+//       companyCounts[user.company]++;
+//     });
 
-    return result;
-}
+//     const result = {};
+//     for (const company in companyTotals) {
+//       result[company] = companyTotals[company] / companyCounts[company];
+//     }
 
-const users20 = [
-    { company: "Microsoft", salary: 50000 },
-    { company: "Google", salary: 1000 },
-    { company: "Microsoft", salary: 50000 },
-    { company: "Microsoft", salary: 1000 },
-    { company: "Meta", salary: 30000 },
-];
+//     return result;
+//   }
 
-console.log(averageSalaryByCompany(users20));
-// { Microsoft: 33666.67, Google: 1000, Meta: 30000 }
-
-// 21. Write debounce:
-function debounce(func, delay) {
-    let timeoutId;
-
+// --------------------------------------------------------------------------------
+// 21. Debounce
+function debounce(fn, delay) {
+    let timer;
     return function (...args) {
-        const context = this;
-
-        clearTimeout(timeoutId);
-
-        timeoutId = setTimeout(() => {
-            func.apply(context, args);
-        }, delay);
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
     };
 }
 
-// Example usage:
-function handleSearch(query) {
-    console.log("Searching for:", query);
-}
+// --------------------------------------------------------------------------------
+// 22. Binary Search
 
-const debouncedSearch = debounce(handleSearch, 300);
-// Later in code:
-// debouncedSearch("test"); // Will only execute after 300ms of no additional calls
-
-// 22. Write Binary search:
 function binarySearch(arr, target) {
     let left = 0;
     let right = arr.length - 1;
